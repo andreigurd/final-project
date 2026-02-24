@@ -286,7 +286,18 @@ def filter_time():
         else:
             print("No recipes in that cook time.")
             return 
-        
+
+#-----------------------------------------------------------------------
+#   option [6] sort by rating
+#-----------------------------------------------------------------------
+def rating_sort():
+    # make list of recipes with ratings (exclude N/A)
+    rated_recipes = [rating for rating in recipes if rating["rating"] != "N/A"]
+    sorted_rated = sorted(rated_recipes, key=lambda recipe: recipe["rating"], reverse=True)
+
+    print(tabulate(sorted_rated,headers="keys", tablefmt="grid"))
+
+
 #-----------------------------------------------------------------------
 #   option [8] Search by any term
 #-----------------------------------------------------------------------
@@ -357,7 +368,7 @@ while True:
     elif option == '5':
         filter_time() 
     elif option == '6':
-        pass 
+        rating_sort() 
     elif option == '7':
         pass                
     elif option == '8':
