@@ -221,7 +221,7 @@ def view_recipes():
         diplay_all_recipes.append(display_dict)
 
 #-----------------------------------------------------------------------
-#   option [3] View by Category
+#   option [3] filter by Category
 #-----------------------------------------------------------------------
 def filter_categories():
     
