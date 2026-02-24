@@ -5,6 +5,9 @@ import os
 import random
 from colorama import Fore, Style, init
 
+valid_category = ["Side Dish", "Main Course", "Dessert", "Beverage"]
+valid_difficulty = ["Hard", "Medium,", "Easy"]
+
 #-----------------------------------------------------------------------
 #   opening recipes json file
 #-----------------------------------------------------------------------
@@ -48,7 +51,7 @@ def show_menu():
     print("[1] Add Recipe")
     print("[2] View All")
     print("[3] View by Tag")
-    print("[4] View by Diffuculty")    
+    print("[4] View by difficulty")    
     print("[5] View by Cook Time")
     print("[6] Sort by Rating")
     print("[7] Sort by Cook Time")
@@ -59,6 +62,129 @@ def show_menu():
     print("[12] Edit Recipe")
     print("[13] Export Recipes to CSV")
     print("[14] Feeling Lucky! Recommendation")  
+
+#-----------------------------------------------------------------------
+#   option [1] Add Recipe
+#-----------------------------------------------------------------------
+def add_recipe():
+#---------------- number
+# check if this works after a recipe is deleted. might need to loop through and renumber everything.
+
+    number = len(recipes) + 1
+
+#---------------- favorite
+# either blank with "" or star
+    favorite = ""
+#---------------- name
+    name = input("Enter recipe name: ")
+
+#---------------- description
+    description = input("Enter recipe description: ")
+
+#---------------- ingredients
+# multiple ingredients and amounts so need a list of dictionaries
+    ingredients = []
+    print('Enter ingredients or enter "done" to stop.').lower()
+
+    while True:
+        ingredient = input("Enter ingredient name: ")
+        if ingredient == "done":
+            break
+        amount = input('Enter ingredient amount: ')
+        ingredient_dict = {
+            "ingredient": ingredient,
+            "amount": amount
+        }
+        ingredients.append(ingredient_dict)
+
+#---------------- instructions
+
+    instructions = []
+    print('Enter instruction or enter "done" to stop.').lower()
+
+    while True:
+        instruction = input("Enter instruction step: ")
+        if instruction == "done":
+            break
+        
+        instruction_dict = {
+            "instruction": instruction,            
+        }
+        instructions.append(instruction_dict)
+
+#---------------- cook time
+
+    while True:
+            try:
+                cook_time = int(input("Enter cook time (minutes): "))
+                if cook_time > 0:
+                    break
+            except ValueError:
+                print("Invalid entry. Please try again.")
+
+#---------------- difficulty
+
+    while True:
+        difficulty = input("Enter difficulty (Easy/ Medium/ Hard): ").lower()
+        if difficulty in valid_difficulty:
+            break
+        else:
+            print("Invalid difficulty. Please try again.")
+
+#---------------- category
+
+    while True:
+        category = input("Enter category (Side Dish/ Main Course/ Dessert/ Beverage): ").lower()
+        if category in valid_category:
+            break
+        else:
+            print("Invalid category. Please try again.")
+    
+#---------------- hashtag/ tag
+
+    tags = []
+    print('Enter tag or enter "done" to stop.').lower()
+
+    while True:
+        tag = input("Enter tag: ")
+        if instruction == "done":
+            break
+        
+        tag_dict = {
+            "tag": tag,            
+        }
+        tags.append(tag_dict)
+
+#---------------- rating (allow decimal ratings)
+# ask once completed
+    rating = "N/A"
+
+#---------------- date added
+
+    date_string = datetime_now_stamp()
+    print(f'Recipe added date entered as {date_string}') 
+
+#---------------- status (completed or not completed)
+
+    completed_flag = "not_completed"
+
+    recipe = {
+        "number": number,
+        "favorite": favorite,
+        "name": name,
+        "description": description,
+        "ingredients": ingredients,
+        "instructions": instructions,
+        "cook_time": cook_time,
+        "difficulty": difficulty,
+        "category": category,
+        "tags": tags,
+        "rating": rating,
+        "date": date_string
+    }
+
+    recipes.append(recipe)
+    return completed_flag
 
 #-----------------------------------------------------------------------
 #   function to write to recipes json

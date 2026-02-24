@@ -12,7 +12,6 @@ Each recipe will be a dictionary with:
 - instructions (multiple items so make a list)
 - cook time
 - diffuculty
-- dietary specification (IE meat, vegiterian, vegan, GF)
 - category
 - hashtag/ tag
 - rating (allow decimal ratings)
