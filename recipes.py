@@ -56,8 +56,8 @@ def show_menu():
     print("[6] Sort by Rating")
     print("[7] Sort by Cook Time")
     print("[8] Search Recipes")
-    print("[9] Start a Recipe")
-    print("[10] Recipe Statistics")
+    print("[9] Recipe Statistics")
+    print("[10] Mark Recipe Complete")
     print("[11] Delete Recipe")
     print("[12] Edit Recipe")
     print("[13] Export Recipes to CSV")
@@ -288,6 +288,45 @@ def filter_time():
             return 
         
 #-----------------------------------------------------------------------
+#   option [8] Search by any term
+#-----------------------------------------------------------------------
+def search():
+
+    search_term = input("Enter search term: ").lower()
+    while True:
+        if search_term == "":
+            print("Blank is invalid entry. Please try again.")
+        else:
+            break
+    
+    search_results = []
+
+    # search in name, description, ingredients, and tags
+
+    for recipe in recipes:
+        if search_term in recipe['name'].lower():
+            search_results.append(recipe)
+
+    for recipe in recipes:
+        if search_term in recipe['description'].lower():
+            search_results.append(recipe)
+
+    for recipe in recipes:
+        if search_term in recipe['ingredients'].lower():
+            search_results.append(recipe)
+
+    for recipe in recipes:
+        if search_term in recipe['tags'].lower():
+            search_results.append(recipe)
+
+    if search_results:
+        print(tabulate(search_results,headers="keys", tablefmt="grid"))
+    else:
+        print("No matching recipes found.")
+        return
+
+
+#-----------------------------------------------------------------------
 #   function to write to recipes json
 #-----------------------------------------------------------------------
 def write_recipe_json():
@@ -322,7 +361,7 @@ while True:
     elif option == '7':
         pass                
     elif option == '8':
-        pass
+        search()
     elif option == '9':        
         pass
     elif option == '10':
