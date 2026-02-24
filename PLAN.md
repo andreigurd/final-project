@@ -23,9 +23,9 @@ look into displaying tables with each word capitalized even if stored lower case
 0. Exit
 1. Add recipe
 2. View all recipes
-3. View by tag
-4. view by diffuculty
-5. view by cook time ( then have under 30 min, under 1 hour, 2 hour +)
+3. filter by Category
+4. filter by diffuculty
+5. filter by cook time ( then have under 30 min, under 1 hour, 2 hour +)
 6. Sort by rating
 7. Sort by cook time
 8. Search

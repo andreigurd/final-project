@@ -50,7 +50,7 @@ def show_menu():
     print("[0] Exit")
     print("[1] Add Recipe")
     print("[2] View All")
-    print("[3] View by Tag")
+    print("[3] View by Category")
     print("[4] View by Difficulty")    
     print("[5] View by Cook Time")
     print("[6] Sort by Rating")
@@ -220,7 +220,27 @@ def view_recipes():
         }
         diplay_all_recipes.append(display_dict)
 
+#-----------------------------------------------------------------------
+#   option [3] View by Category
+#-----------------------------------------------------------------------
+def filter_categories():
     
+    while True:
+        cat_filter = input("Enter category filter (Side Dish/ Main Course/ Dessert/ Beverage): ").lower()
+        if cat_filter in valid_category:
+            break
+        else:
+            print("Invalid category. Please try again.")
+
+        filtered_categories = [recipe for recipe in recipes if cat_filter in recipe["category"].lower()]
+
+        # validate recipes in category exist
+        if filtered_categories:
+            print(tabulate(filtered_categories,headers="keys", tablefmt="grid"))
+        else:
+            print("No recipes in that category.")
+            return
+        
 #-----------------------------------------------------------------------
 #   function to write to recipes json
 #-----------------------------------------------------------------------
@@ -246,7 +266,7 @@ while True:
         diplay_all_recipes = view_recipes()
         print(tabulate(diplay_all_recipes,headers="keys", tablefmt="grid"))
     elif option == '3':
-        pass         
+        filter_categories()         
     elif option == '4':        
         pass
     elif option == '5':
