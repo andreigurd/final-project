@@ -50,9 +50,9 @@ def show_menu():
     print("[0] Exit")
     print("[1] Add Recipe")
     print("[2] View All")
-    print("[3] View by Category")
-    print("[4] View by Difficulty")    
-    print("[5] View by Cook Time")
+    print("[3] Filter by Category")
+    print("[4] Filter by Difficulty")    
+    print("[5] Filter by Cook Time")
     print("[6] Sort by Rating")
     print("[7] Sort by Cook Time")
     print("[8] Search Recipes")
@@ -240,6 +240,26 @@ def filter_categories():
         else:
             print("No recipes in that category.")
             return
+
+#-----------------------------------------------------------------------
+#   option [4] filter by Difficulty
+#-----------------------------------------------------------------------
+def filter_difficulty():
+    while True:
+        difficulty_filter = input("Enter difficulty filter (Easy/ Medium/ Hard): ").lower()
+        if difficulty_filter in valid_difficulty:
+            break
+        else:
+            print("Invalid difficulty. Please try again.")
+
+        filtered_difficulty = [recipe for recipe in recipes if difficulty_filter in recipe["difficulty"].lower()]
+
+        # validate recipes in difficulty exist
+        if filtered_difficulty:
+            print(tabulate(filtered_difficulty,headers="keys", tablefmt="grid"))
+        else:
+            print("No recipes in that difficulty.")
+            return  
         
 #-----------------------------------------------------------------------
 #   function to write to recipes json
@@ -268,7 +288,7 @@ while True:
     elif option == '3':
         filter_categories()         
     elif option == '4':        
-        pass
+        filter_difficulty()
     elif option == '5':
         pass 
     elif option == '6':
