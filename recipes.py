@@ -51,7 +51,7 @@ def show_menu():
     print("[1] Add Recipe")
     print("[2] View All")
     print("[3] View by Tag")
-    print("[4] View by difficulty")    
+    print("[4] View by Difficulty")    
     print("[5] View by Cook Time")
     print("[6] Sort by Rating")
     print("[7] Sort by Cook Time")
@@ -187,6 +187,41 @@ def add_recipe():
     return completed_flag
 
 #-----------------------------------------------------------------------
+#   option [2] show all Recipes
+#-----------------------------------------------------------------------
+# dont need to show ingredients until recipe is started. make shorter list to display
+def view_recipes():
+    print('Displaying All Recipes. Completed Recipes shown in Green.')
+    # validate recipes exist. return and ends function if recipes is empty.
+    if not recipes:
+        print('No recipes available.')
+        return
+    
+    # make different list to display
+
+    diplay_all_recipes = []
+
+    for recipe in recipes:        
+        name = recipe["name"]
+        # turn completed recipe name green
+        if recipe["name"] == "completed":
+            name = Fore.GREEN + name + Style.RESET_ALL
+        
+        # append into a new list
+        display_dict = {
+            "number": recipe['number'],
+            "favorite": recipe['favorite'],
+            "name": name,
+            "cook_time": recipe['cook_time'],
+            "difficulty": recipe['difficulty'],
+            "category": recipe['category'],
+            "tags": recipe['tags'],
+            "rating": recipe['rating']            
+        }
+        diplay_all_recipes.append(display_dict)
+
+    
+#-----------------------------------------------------------------------
 #   function to write to recipes json
 #-----------------------------------------------------------------------
 def write_recipe_json():
@@ -207,8 +242,9 @@ while True:
     elif option == '1':
         add_recipe()
         write_recipe_json()       
-    elif option == '2':
-        pass
+    elif option == '2':        
+        diplay_all_recipes = view_recipes()
+        print(tabulate(diplay_all_recipes,headers="keys", tablefmt="grid"))
     elif option == '3':
         pass         
     elif option == '4':        
