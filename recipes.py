@@ -262,6 +262,32 @@ def filter_difficulty():
             return  
         
 #-----------------------------------------------------------------------
+#   option [5] filter by Cook Time
+#-----------------------------------------------------------------------
+def filter_time():
+    # user selects time slot filter
+    while True:
+        time_filter = input("Enter cook time filter ([1] under 30 min/ [2] under 2 hours/ [3] over 2 hours): ")
+        if time_filter == "1":
+            filtered_cook_time = [recipe for recipe in recipes if recipe["cook_time"] < 30]
+            break
+        elif time_filter == "2":
+            filtered_cook_time = [recipe for recipe in recipes if recipe["cook_time"] < 120]
+            break
+        elif time_filter == "3":
+            filtered_cook_time = [recipe for recipe in recipes if recipe["cook_time"] >= 120]
+            break
+        else:
+            print("Invalid number entry. Select number (1-3).")
+        
+        # validate recipes in time slot exist
+        if filtered_cook_time:
+            print(tabulate(filtered_cook_time,headers="keys", tablefmt="grid"))
+        else:
+            print("No recipes in that cook time.")
+            return 
+        
+#-----------------------------------------------------------------------
 #   function to write to recipes json
 #-----------------------------------------------------------------------
 def write_recipe_json():
@@ -290,7 +316,7 @@ while True:
     elif option == '4':        
         filter_difficulty()
     elif option == '5':
-        pass 
+        filter_time() 
     elif option == '6':
         pass 
     elif option == '7':
