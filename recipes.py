@@ -441,6 +441,12 @@ def delete_recipe():
     removed_recipe = recipes.pop(choice-1)
     print(f'Recipe "{removed_recipe["name"]}" deleted.')
 
+    # need to renumber recipes
+    # number = len(recipes)+1 wont work here because that was appending into a list. this is looping through a list.
+
+    for index, recipe in enumerate(recipes, start=1):
+        recipe["number"] = index
+
 #-----------------------------------------------------------------------
 #   function to write to recipes json
 #-----------------------------------------------------------------------
