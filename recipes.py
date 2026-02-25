@@ -28,6 +28,26 @@ except PermissionError:
     recipes = []
 
 #-----------------------------------------------------------------------
+#   opening recipe goals json file
+#-----------------------------------------------------------------------
+
+try:
+    with open('recipe_goals.json', 'r') as file:
+        recipe_goals = json.load(file)
+except FileNotFoundError:
+    print("Goals file not found. Goal set to default zero.")
+    recipe_goals = {"year_goal": 0}
+except json.JSONDecodeError:
+    print("Issue loading Goals file. File empty or invalid JSON file. Goal set to default zero.")
+    recipe_goals = {"year_goal": 0}
+except ValueError:
+    print("Invalid Goals item. Goal set to default zero.")
+    recipe_goals = {"year_goal": 0}
+except PermissionError:
+    print("Need permission to access Goals file. Goal set to default zero.")
+    recipe_goals = {"year_goal": 0}
+
+#-----------------------------------------------------------------------
 #   timestamp
 #-----------------------------------------------------------------------
 
@@ -489,11 +509,74 @@ def delete_recipe():
         recipe["number"] = index
 
 #-----------------------------------------------------------------------
+#   option [12] recipe goals
+#-----------------------------------------------------------------------
+def run_recipe_goal():
+
+#---------------- total completed recipes
+
+    completed_recipes = [completed for completed in recipes if completed["finished_date"] != "N/A"]
+
+#-------- recipes finished this year
+
+    now = datetime.now()    
+    year_fin_recipes = []
+    for finished in completed_recipes:
+        
+        date_string = now.strftime("%Y-%m-%d %H:%M:%S")       
+
+        recipe_date = finished['finished_date'][:4]
+        year_now = date_string[:4]
+
+        if recipe_date == year_now:
+            year_fin_recipes.append(finished)
+    total_year_finished = len(year_fin_recipes)   
+    
+    #-------- determin goal status
+    
+    current_goal = recipe_goals["year_goal"] 
+    if 0 < current_goal:
+        if current_goal <= total_year_finished:
+            print(f'Recipe goal met! {total_year_finished} recipes finished this year.')
+        else:               
+            print(f'Recipe goal not met yet. Only {total_year_finished} recipes finished this year.')
+    
+    #-------- overide or user existing goal
+    if current_goal > 0:
+        print(f"Current yearly recipe completion goal is {current_goal}.")
+        while True:            
+            answer = input("Override or Continue with goal?: ").lower()
+
+            if answer == "override":
+                recipe_goals.clear()                
+                break
+            elif answer == "continue":
+                return
+            else:
+                print("Invalid option. Please try again.")
+
+    #-------- input recipe goal amount 
+    while True:        
+        try:
+            recipe_goals["year_goal"] = int(input("Enter yearly recipe completion goal: "))
+            print(f"Goal of {recipe_goals['year_goal']} recipes entered.")
+            break         
+        except ValueError:
+            print("Invalid number. Please try again.")
+
+#-----------------------------------------------------------------------
 #   function to write to recipes json
 #-----------------------------------------------------------------------
 def write_recipe_json():
     with open('recipes.json', 'w') as file:
         json.dump(recipes, file, indent=4)
+
+#-----------------------------------------------------------------------
+#   function to write to recipe goals json
+#-----------------------------------------------------------------------
+def write_recipe_goals_json():
+    with open('recipe_goals.json', 'w') as file:
+        json.dump(recipe_goals, file, indent=4)
 
 #-----------------------------------------------------------------------
 #   # while loop to get user input
@@ -532,7 +615,8 @@ while True:
         delete_recipe()
         write_recipe_json()
     elif option == '12':
-        pass
+        run_recipe_goal()
+        write_recipe_goals_json()
     elif option == '13':
         pass      
     else:
