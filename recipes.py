@@ -297,6 +297,15 @@ def rating_sort():
 
     print(tabulate(sorted_rated,headers="keys", tablefmt="grid"))
 
+#-----------------------------------------------------------------------
+#   option [7] sort by cook time
+#-----------------------------------------------------------------------
+def rating_sort():
+    
+    
+    sorted_time = sorted(recipes, key=lambda recipe: recipe["cook_time"], reverse=True)
+
+    print(tabulate(sorted_time,headers="keys", tablefmt="grid"))
 
 #-----------------------------------------------------------------------
 #   option [8] Search by any term
