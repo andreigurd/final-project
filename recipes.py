@@ -75,11 +75,31 @@ def add_recipe():
 #---------------- favorite
 # either blank with "" or star
     favorite = ""
+
+    while True:
+        choice = input("Would you like to mark recipe as favorite (yes or no): ").lower()
+        if choice == "yes":
+            favorite = "⭐"
+        elif choice == "no":
+            break
+        else:
+            print("Invalid entry. Please enter yes or no.")
 #---------------- name
-    name = input("Enter recipe name: ")
+    while True:
+        name = input("Enter recipe name: ")
+        if name == "":
+            print("Blank space is not a valide entry. Please try again.")
+        else:
+            break
 
 #---------------- description
-    description = input("Enter recipe description: ")
+    while True:
+        description = input("Enter recipe description: ")
+        if description == "":
+            print("Blank space is not a valide entry. Please try again.")
+        else:
+            break
+    
 
 #---------------- ingredients
 # multiple ingredients and amounts so need a list of dictionaries
@@ -166,8 +186,6 @@ def add_recipe():
 
 #---------------- status (completed or not completed)
 
-    completed_flag = "not_completed"
-
     recipe = {
         "number": number,
         "favorite": favorite,
@@ -180,12 +198,12 @@ def add_recipe():
         "category": category,
         "tags": tags,
         "rating": rating,
-        "date_added": date_string
+        "date_added": date_string,
+        "finished_date": "N/A"
     }
 
     recipes.append(recipe)
-    return completed_flag
-
+    
 #-----------------------------------------------------------------------
 #   option [2] show all Recipes
 #-----------------------------------------------------------------------
