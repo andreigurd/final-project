@@ -5,8 +5,8 @@ import os
 import random
 from colorama import Fore, Style, init
 
-valid_category = ["Side Dish", "Main Course", "Dessert", "Beverage"]
-valid_difficulty = ["Hard", "Medium,", "Easy"]
+valid_category = ["side dish", "main course", "dessert", "beverage"]
+valid_difficulty = ["hard", "medium", "easy"]
 
 #-----------------------------------------------------------------------
 #   opening recipes json file
@@ -84,10 +84,10 @@ def add_recipe():
 #---------------- ingredients
 # multiple ingredients and amounts so need a list of dictionaries
     ingredients = []
-    print('Enter ingredients or enter "done" to stop.').lower()
+    print('Enter ingredients or enter "done" to stop.')
 
     while True:
-        ingredient = input("Enter ingredient name: ")
+        ingredient = input("Enter ingredient name: ").lower()
         if ingredient == "done":
             break
         amount = input('Enter ingredient amount: ')
@@ -100,10 +100,10 @@ def add_recipe():
 #---------------- instructions
 
     instructions = []
-    print('Enter instruction or enter "done" to stop.').lower()
+    print('Enter instruction or enter "done" to stop.')
 
     while True:
-        instruction = input("Enter instruction step: ")
+        instruction = input("Enter instruction step: ").lower()
         if instruction == "done":
             break
         
@@ -143,11 +143,11 @@ def add_recipe():
 #---------------- hashtag/ tag
 
     tags = []
-    print('Enter tag or enter "done" to stop.').lower()
+    print('Enter tag or enter "done" to stop.')
 
     while True:
-        tag = input("Enter tag: ")
-        if instruction == "done":
+        tag = input("Enter recipe tag: ").lower()
+        if tag == "done":
             break
         
         tag_dict = {
@@ -220,6 +220,8 @@ def view_recipes():
         }
         diplay_all_recipes.append(display_dict)
 
+    return diplay_all_recipes
+
 #-----------------------------------------------------------------------
 #   option [3] filter by Category
 #-----------------------------------------------------------------------
@@ -280,12 +282,12 @@ def filter_time():
         else:
             print("Invalid number entry. Select number (1-3).")
         
-        # validate recipes in time slot exist
-        if filtered_cook_time:
-            print(tabulate(filtered_cook_time,headers="keys", tablefmt="grid"))
-        else:
-            print("No recipes in that cook time.")
-            return 
+    # validate recipes in time slot exist
+    if filtered_cook_time:
+        print(tabulate(filtered_cook_time,headers="keys", tablefmt="grid"))
+    else:
+        print("No recipes in that cook time.")
+        return 
 
 #-----------------------------------------------------------------------
 #   option [6] sort by rating
@@ -296,6 +298,15 @@ def rating_sort():
     sorted_rated = sorted(rated_recipes, key=lambda recipe: recipe["rating"], reverse=True)
 
     print(tabulate(sorted_rated,headers="keys", tablefmt="grid"))
+
+#-----------------------------------------------------------------------
+#   option [7] sort by time
+#-----------------------------------------------------------------------
+def cook_time_sort():
+    
+    sorted_cook_time = sorted(recipes, key=lambda recipe: recipe["cook_time"], reverse=True)
+
+    print(tabulate(sorted_cook_time,headers="keys", tablefmt="grid"))
 
 
 #-----------------------------------------------------------------------
@@ -321,9 +332,11 @@ def search():
     for recipe in recipes:
         if search_term in recipe['description'].lower():
             search_results.append(recipe)
+    #ingredients is a list. need to seach inside the list
 
     for recipe in recipes:
-        if search_term in recipe['ingredients'].lower():
+        
+        if search_term in recipe['ingredients']:
             search_results.append(recipe)
 
     for recipe in recipes:
@@ -370,7 +383,7 @@ while True:
     elif option == '6':
         rating_sort() 
     elif option == '7':
-        pass                
+        cook_time_sort()                
     elif option == '8':
         search()
     elif option == '9':        
