@@ -384,15 +384,41 @@ def view_statistics():
 
     total_recipes = len(recipes)
 
-#---------------- Highest rated recipe
+#---------------- total completed recipes
 
-    max_rated = max()
+    completed_recipes = [completed for completed in recipes if completed["finished_date"] != "N/A"]
+    total_completed = len(completed_recipes)
 
 #---------------- recipes completed this month
 
+    now = datetime.now()    
+    month_fin_recipes = []
+    for finished in completed_recipes:
+        
+        date_string = now.strftime("%Y-%m-%d %H:%M:%S")       
 
+        recipe_date = finished['finished_date'][:7]
+        month_now = date_string[:7]
 
-#---------------- total completed recipes
+        if recipe_date == month_now:
+            month_fin_recipes.append(finished)
+    total_month_finished = len(month_fin_recipes)
+
+#---------------- Highest rated recipe
+
+    rated_recipes = [item for item in recipes if item["rating"] != "N/A"]
+    sorted_rated = sorted(rated_recipes, key=lambda rated_item: rated_item["rating"], reverse=True)
+    max_rated = sorted_rated[0]
+
+    stats_table = [
+        ["Total Recipes", total_recipes],
+        ["Total Completed Recipes", total_completed],
+        ["Recipes Completed This Month", total_month_finished],
+        ["Highest Rated Recipe", max_rated]
+    ]
+
+    print("--- Recipe Statistics ---")
+    print(tabulate(stats_table, tablefmt="grid"))
 
 
 #-----------------------------------------------------------------------
@@ -419,6 +445,21 @@ def mark_complete():
     selected_recipe['finished_date'] = date_string
 
     print(f'Recipe "{selected_recipe['name']}" marked complete.')
+
+    # provide rating for finished recipe
+    while True:
+        try:
+            rating = float(input("Select recipe rating (1 to 5 including decimals): "))
+            if 0 <= rating and rating <= 5:
+                selected_recipe['rating'] = rating
+                break
+            else:
+                print("Number out of range. Please try again.")
+
+        except ValueError:
+            print("Invalid entry. Please try again.")
+
+
 
 #-----------------------------------------------------------------------
 #   option [11] delete recipe
