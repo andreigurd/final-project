@@ -418,8 +418,28 @@ def mark_complete():
     date_string = datetime_now_stamp()
     selected_recipe['finished_date'] = date_string
 
-    print(f'Recipe "{selected_recipe['name']} marked complete.')
+    print(f'Recipe "{selected_recipe['name']}" marked complete.')
 
+#-----------------------------------------------------------------------
+#   option [11] delete recipe
+#-----------------------------------------------------------------------
+def delete_recipe():
+    # show all recipes to select from
+    view_recipes()
+        
+    while True:
+        try:
+            choice = int(input("Select recipe number to delete: "))
+            if 1 <= choice and choice <= len(recipes):
+                break
+            else:
+                print("Number out of range. Please try again.")
+
+        except ValueError:
+            print("Invalid entry. Please try again.")
+
+    removed_recipe = recipes.pop(choice-1)
+    print(f'Recipe "{removed_recipe["name"]}" deleted.')
 
 #-----------------------------------------------------------------------
 #   function to write to recipes json
@@ -460,8 +480,10 @@ while True:
         view_statistics()
     elif option == '10':
         mark_complete()
+        write_recipe_json()
     elif option == '11':
-        pass
+        delete_recipe()
+        write_recipe_json()
     elif option == '12':
         pass
     elif option == '13':
