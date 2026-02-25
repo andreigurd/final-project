@@ -565,6 +565,29 @@ def run_recipe_goal():
             print("Invalid number. Please try again.")
 
 #-----------------------------------------------------------------------
+#   option [13] CSV export recipes
+#-----------------------------------------------------------------------  
+def csv_export():
+
+    # validate recipes exist. return and ends function if recipes is empty.
+    if not recipes:
+        print('No recipes available to export.')
+        return
+
+    now = datetime.now()
+    date_string = now.strftime("%Y-%m-%d %H:%M:%S")     
+    date_now = date_string[:10]
+
+    with open(f'{date_now} recipes.csv', 'w') as file:
+        file.write("number,favorite,name,description,ingredients,instructions,cook_time,difficulty,category,tags,rating,date_added,finished_date\n")
+        for recipe in recipes:
+            file.write(f"{recipe['number']},{recipe['favorite']},{recipe['name']},{recipe['description']},{recipe['ingredients']},{recipe['instructions']},{recipe['cook_time']},{recipe['difficulty']},{recipe['category']},{recipe['tags']},{recipe['rating']},{recipe['date_added']},{recipe['finished_date']}\n")
+    
+    file_path = os.path.abspath(f'{date_now} recipes.csv')
+    print(f"CSV file exported to:\n{file_path}")
+
+
+#-----------------------------------------------------------------------
 #   function to write to recipes json
 #-----------------------------------------------------------------------
 def write_recipe_json():
