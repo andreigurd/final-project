@@ -300,9 +300,8 @@ def rating_sort():
 #-----------------------------------------------------------------------
 #   option [7] sort by cook time
 #-----------------------------------------------------------------------
-def rating_sort():
-    
-    
+def cook_time_sort():
+        
     sorted_time = sorted(recipes, key=lambda recipe: recipe["cook_time"], reverse=True)
 
     print(tabulate(sorted_time,headers="keys", tablefmt="grid"))
@@ -384,7 +383,7 @@ while True:
     elif option == '6':
         rating_sort() 
     elif option == '7':
-        pass                
+        cook_time_sort()                
     elif option == '8':
         search()
     elif option == '9':        
