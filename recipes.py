@@ -313,22 +313,27 @@ def search():
     search_results = []
 
     # search in name, description, ingredients, and tags
+    # need unique variables for each. cant have multiple recipe variables in one function.
 
-    for recipe in recipes:
-        if search_term in recipe['name'].lower():
-            search_results.append(recipe)
+    for a in recipes:
+        if search_term in a['name'].lower():
+            search_results.append(a)
 
-    for recipe in recipes:
-        if search_term in recipe['description'].lower():
-            search_results.append(recipe)
+    for b in recipes:
+        if search_term in b['description'].lower():
+            search_results.append(b)
 
-    for recipe in recipes:
-        if search_term in recipe['ingredients'].lower():
-            search_results.append(recipe)
+# ingredients is a list so need to look inside list.
+    for c in recipes:
+        for cc in c['ingredients']:
+            # note dictionary ingredients has ingredient and amount. want to refrence ingredient here, no S.
+            if search_term in cc['ingredient'].lower():
+                search_results.append(c)
 
-    for recipe in recipes:
-        if search_term in recipe['tags'].lower():
-            search_results.append(recipe)
+    for d in recipes:
+        for dd in d['tags']:
+            if search_term in dd['tag'].lower():
+                search_results.append(d)
 
     if search_results:
         print(tabulate(search_results,headers="keys", tablefmt="grid"))

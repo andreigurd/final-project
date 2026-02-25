@@ -29,8 +29,8 @@ look into displaying tables with each word capitalized even if stored lower case
 6. Sort by rating
 7. Sort by cook time
 8. Search
-9. Start Recipe (with Auto mark complete)
-10. View Recipe statistics ( Total recipes, Highest rated recipe, recipes completed this month, total completed)
+9. View Recipe statistics ( Total recipes, Highest rated recipe, recipes completed this month, total completed)
+10. Mark Recipe Complete
 11. Delete recipe
 12. Export to CSV file.
 13. Get Recipe Recommendation (from not completed list)
