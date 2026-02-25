@@ -32,9 +32,10 @@ look into displaying tables with each word capitalized even if stored lower case
 9. View Recipe statistics ( Total recipes, Highest rated recipe, recipes completed this month, total completed)
 10. Mark Recipe Complete
 11. Delete recipe
-12. Export to CSV file.
-13. Get Recipe Recommendation (from not completed list)
-14. Save/load from JSON
+12. Recipe Goals (user sets goal and automatically show goal status)
+13. Export to CSV file.
+14. Get Recipe Recommendation (from not completed list)
+15. Save/load from JSON
 
 ## Files
 - recipes.py (main program)

@@ -59,8 +59,9 @@ def show_menu():
     print("[9] Recipe Statistics")
     print("[10] Mark Recipe Complete")
     print("[11] Delete Recipe")
-    print("[12] Export Recipes to CSV")
-    print("[13] Feeling Lucky! Recommendation") 
+    print("[12] Recipe Goals")
+    print("[13] Export Recipes to CSV")
+    print("[14] Feeling Lucky! Recommendation") 
     
 
 #-----------------------------------------------------------------------
@@ -238,6 +239,8 @@ def view_recipes():
         }
         diplay_all_recipes.append(display_dict)
 
+    print(tabulate(diplay_all_recipes,headers="keys", tablefmt="grid"))
+
 #-----------------------------------------------------------------------
 #   option [3] filter by Category
 #-----------------------------------------------------------------------
@@ -391,6 +394,33 @@ def view_statistics():
 
 #---------------- total completed recipes
 
+
+#-----------------------------------------------------------------------
+#   option [10] mark recipe complete
+#-----------------------------------------------------------------------
+def mark_complete():
+    # show all recipes to select from
+    view_recipes()
+    
+    
+    while True:
+        try:
+            choice = int(input("Select recipe number to delete: "))
+            if 1 <= choice and choice <= len(recipes):
+                break
+            else:
+                print("Number out of range. Please try again.")
+
+        except ValueError:
+            print("Invalid entry. Please try again.")
+
+    selected_recipe = recipes[choice-1]
+    date_string = datetime_now_stamp()
+    selected_recipe['finished_date'] = date_string
+
+    print(f'Recipe "{selected_recipe['name']} marked complete.')
+
+
 #-----------------------------------------------------------------------
 #   function to write to recipes json
 #-----------------------------------------------------------------------
@@ -413,8 +443,7 @@ while True:
         add_recipe()
         write_recipe_json()       
     elif option == '2':        
-        diplay_all_recipes = view_recipes()
-        print(tabulate(diplay_all_recipes,headers="keys", tablefmt="grid"))
+        view_recipes()        
     elif option == '3':
         filter_categories()         
     elif option == '4':        
@@ -430,7 +459,7 @@ while True:
     elif option == '9':        
         view_statistics()
     elif option == '10':
-        pass
+        mark_complete()
     elif option == '11':
         pass
     elif option == '12':
