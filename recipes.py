@@ -81,7 +81,7 @@ def show_menu():
     print("[11] Delete Recipe")
     print("[12] Recipe Goals")
     print("[13] Export Recipes to CSV")
-    print("[14] Feeling Lucky! Recommendation") 
+    print("[14] Get Recipe Recommendation") 
     
 
 #-----------------------------------------------------------------------
@@ -586,6 +586,28 @@ def csv_export():
     file_path = os.path.abspath(f'{date_now} recipes.csv')
     print(f"CSV file exported to:\n{file_path}")
 
+#-----------------------------------------------------------------------
+#   option [14] Get recipe Recommendation from not finished list
+#-----------------------------------------------------------------------
+def book_recommendation():
+
+    # validate recipes exist. return and ends function if recipes is empty.
+    if not recipes:
+        print('No recipes available.')
+        return
+    
+    # make list of not finished recipes
+    unfinished_recipes = [item for item in recipes if item["finished_date"] == "N/A"]
+        
+    #make list of all books want to read
+
+    
+    if unfinished_recipes:
+        recommended_recipe = random.choice(unfinished_recipes)
+        print(f'Recommending to try the "{recommended_recipe["name"]}" recipe.')
+    else:
+        recommended_recipe = random.choice(recipes)
+        print(f'All recipes are finished. Recommending to try the "{recommended_recipe["name"]}" recipe again')
 
 #-----------------------------------------------------------------------
 #   function to write to recipes json
