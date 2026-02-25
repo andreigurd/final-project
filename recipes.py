@@ -5,8 +5,8 @@ import os
 import random
 from colorama import Fore, Style, init
 
-valid_category = ["Side Dish", "Main Course", "Dessert", "Beverage"]
-valid_difficulty = ["Hard", "Medium,", "Easy"]
+valid_category = ["side dish", "main course", "dessert", "beverage"]
+valid_difficulty = ["hard", "medium", "easy"]
 
 #-----------------------------------------------------------------------
 #   opening recipes json file
@@ -59,9 +59,9 @@ def show_menu():
     print("[9] Recipe Statistics")
     print("[10] Mark Recipe Complete")
     print("[11] Delete Recipe")
-    print("[12] Edit Recipe")
-    print("[13] Export Recipes to CSV")
-    print("[14] Feeling Lucky! Recommendation")  
+    print("[12] Export Recipes to CSV")
+    print("[13] Feeling Lucky! Recommendation") 
+    
 
 #-----------------------------------------------------------------------
 #   option [1] Add Recipe
@@ -84,10 +84,10 @@ def add_recipe():
 #---------------- ingredients
 # multiple ingredients and amounts so need a list of dictionaries
     ingredients = []
-    print('Enter ingredients or enter "done" to stop.').lower()
+    print('Enter ingredients or enter "done" to stop.')
 
     while True:
-        ingredient = input("Enter ingredient name: ")
+        ingredient = input("Enter ingredient name: ").lower()
         if ingredient == "done":
             break
         amount = input('Enter ingredient amount: ')
@@ -100,10 +100,10 @@ def add_recipe():
 #---------------- instructions
 
     instructions = []
-    print('Enter instruction or enter "done" to stop.').lower()
+    print('Enter instruction or enter "done" to stop.')
 
     while True:
-        instruction = input("Enter instruction step: ")
+        instruction = input("Enter instruction step: ").lower()
         if instruction == "done":
             break
         
@@ -143,11 +143,11 @@ def add_recipe():
 #---------------- hashtag/ tag
 
     tags = []
-    print('Enter tag or enter "done" to stop.').lower()
+    print('Enter tag or enter "done" to stop.')
 
     while True:
-        tag = input("Enter tag: ")
-        if instruction == "done":
+        tag = input("Enter tag: ").lower()
+        if tag == "done":
             break
         
         tag_dict = {
@@ -180,7 +180,7 @@ def add_recipe():
         "category": category,
         "tags": tags,
         "rating": rating,
-        "date": date_string
+        "date_added": date_string
     }
 
     recipes.append(recipe)
@@ -349,6 +349,29 @@ def search():
         print("No matching recipes found.")
         return
 
+#-----------------------------------------------------------------------
+#   option [9] Recipe Statistics
+#-----------------------------------------------------------------------
+def view_statistics():
+
+    # validate recipes exist
+    if len(recipes) == 0:
+        print("No recipes created yet.")
+        return
+    
+#---------------- total recipes
+
+    total_recipes = len(recipes)
+
+#---------------- Highest rated recipe
+
+    max_rated = max()
+
+#---------------- recipes completed this month
+
+
+
+#---------------- total completed recipes
 
 #-----------------------------------------------------------------------
 #   function to write to recipes json
@@ -387,7 +410,7 @@ while True:
     elif option == '8':
         search()
     elif option == '9':        
-        pass
+        view_statistics()
     elif option == '10':
         pass
     elif option == '11':
