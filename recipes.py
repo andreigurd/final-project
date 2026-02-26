@@ -256,12 +256,15 @@ def view_recipes():
         }
         diplay_all_recipes.append(display_dict)
 
-    print(tabulate(diplay_all_recipes,headers="keys", tablefmt="grid"))
+    return diplay_all_recipes
+    #print(tabulate(diplay_all_recipes,headers="keys", tablefmt="grid"))
 
 #-----------------------------------------------------------------------
 #   option [3] filter by Category
 #-----------------------------------------------------------------------
 def filter_categories():
+
+    diplay_all_recipes = view_recipes()
     
     while True:
         cat_filter = input("Enter category filter (Side Dish/ Main Course/ Dessert/ Beverage): ").lower()
@@ -270,10 +273,11 @@ def filter_categories():
         else:
             print("Invalid category. Please try again.")
 
-    filtered_categories = [recipe for recipe in recipes if cat_filter in recipe["category"].lower()]
+    filtered_categories = [recipe for recipe in diplay_all_recipes if cat_filter in recipe["category"].lower()]
 
         # validate recipes in category exist
     if filtered_categories:
+        print('Displaying Filtered Summary Recipes. Completed Recipes shown in Green.')
         print(tabulate(filtered_categories,headers="keys", tablefmt="grid"))
     else:
         print("No recipes in that category.")
@@ -283,6 +287,9 @@ def filter_categories():
 #   option [4] filter by Difficulty
 #-----------------------------------------------------------------------
 def filter_difficulty():
+
+    diplay_all_recipes = view_recipes()
+
     while True:
         difficulty_filter = input("Enter difficulty filter (Easy/ Medium/ Hard): ").lower()
         if difficulty_filter in valid_difficulty:
@@ -290,10 +297,11 @@ def filter_difficulty():
         else:
             print("Invalid difficulty. Please try again.")
 
-    filtered_difficulty = [recipe for recipe in recipes if difficulty_filter in recipe["difficulty"].lower()]
+    filtered_difficulty = [recipe for recipe in diplay_all_recipes if difficulty_filter in recipe["difficulty"].lower()]
 
     # validate recipes in difficulty exist
     if filtered_difficulty:
+        print('Displaying Filtered Summary Recipes. Completed Recipes shown in Green.')
         print(tabulate(filtered_difficulty,headers="keys", tablefmt="grid"))
     else:
         print("No recipes in that difficulty.")
@@ -303,23 +311,27 @@ def filter_difficulty():
 #   option [5] filter by Cook Time
 #-----------------------------------------------------------------------
 def filter_time():
+
+    diplay_all_recipes = view_recipes()
+
     # user selects time slot filter
     while True:
         time_filter = input("Enter cook time filter ([1] under 30 min/ [2] under 2 hours/ [3] over 2 hours): ")
         if time_filter == "1":
-            filtered_cook_time = [recipe for recipe in recipes if recipe["cook_time"] < 30]
+            filtered_cook_time = [recipe for recipe in diplay_all_recipes if recipe["cook_time"] < 30]
             break
         elif time_filter == "2":
-            filtered_cook_time = [recipe for recipe in recipes if recipe["cook_time"] < 120]
+            filtered_cook_time = [recipe for recipe in diplay_all_recipes if recipe["cook_time"] < 120]
             break
         elif time_filter == "3":
-            filtered_cook_time = [recipe for recipe in recipes if recipe["cook_time"] >= 120]
+            filtered_cook_time = [recipe for recipe in diplay_all_recipes if recipe["cook_time"] >= 120]
             break
         else:
             print("Invalid number entry. Select number (1-3).")
         
     # validate recipes in time slot exist
     if filtered_cook_time:
+        print('Displaying Filtered Summary Recipes. Completed Recipes shown in Green.')
         print(tabulate(filtered_cook_time,headers="keys", tablefmt="grid"))
     else:
         print("No recipes in that cook time.")
@@ -329,19 +341,26 @@ def filter_time():
 #   option [6] sort by rating
 #-----------------------------------------------------------------------
 def rating_sort():
+
+    diplay_all_recipes = view_recipes()
+
     # make list of recipes with ratings (exclude N/A)
-    rated_recipes = [rating for rating in recipes if rating["rating"] != "N/A"]
+    rated_recipes = [rating for rating in diplay_all_recipes if rating["rating"] != "N/A"]
     sorted_rated = sorted(rated_recipes, key=lambda recipe: recipe["rating"], reverse=True)
 
+    print('Displaying Sorted Summary Recipes. Completed Recipes shown in Green.')
     print(tabulate(sorted_rated,headers="keys", tablefmt="grid"))
 
 #-----------------------------------------------------------------------
 #   option [7] sort by cook time
 #-----------------------------------------------------------------------
 def cook_time_sort():
-        
-    sorted_time = sorted(recipes, key=lambda recipe: recipe["cook_time"], reverse=True)
 
+    diplay_all_recipes = view_recipes()
+        
+    sorted_time = sorted(diplay_all_recipes, key=lambda recipe: recipe["cook_time"], reverse=True)
+
+    print('Displaying Sorted Summary Recipes. Completed Recipes shown in Green.')
     print(tabulate(sorted_time,headers="keys", tablefmt="grid"))
 
 #-----------------------------------------------------------------------
@@ -644,7 +663,8 @@ while True:
         add_recipe()
         write_recipe_json()       
     elif option == '2':        
-        view_recipes()        
+        diplay_all_recipes = view_recipes()        
+        print(tabulate(diplay_all_recipes,headers="keys", tablefmt="grid"))        
     elif option == '3':
         filter_categories()         
     elif option == '4':        
