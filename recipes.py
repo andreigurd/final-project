@@ -1,6 +1,6 @@
 import json
 from tabulate import tabulate
-from datetime import datetime,date,timedelta
+from datetime import datetime
 import os
 import random
 from colorama import Fore, Style, init
@@ -11,8 +11,9 @@ valid_difficulty = ["hard", "medium", "easy"]
 #-----------------------------------------------------------------------
 #   opening recipes json file
 #-----------------------------------------------------------------------
+# encoding="utf-8" is needed for emoji stored in json
 try:
-    with open('recipes.json', 'r') as file:
+    with open('recipes.json', 'r', encoding="utf-8") as file:
         recipes = json.load(file)
 except FileNotFoundError:
     print("Recipes file not found. Blank list created.")
@@ -51,14 +52,11 @@ except PermissionError:
 #   timestamp
 #-----------------------------------------------------------------------
 
-from datetime import datetime
 def datetime_now_stamp():    
     now = datetime.now()
     date_string = now.strftime("%Y-%m-%d %H:%M:%S")
     return date_string
 
-# importing time delta to allow time change functions
-from datetime import datetime,timedelta
 
 #-----------------------------------------------------------------------
 #   showing menu
@@ -100,7 +98,7 @@ def add_recipe():
     while True:
         choice = input("Would you like to mark recipe as favorite (yes or no): ").lower()
         if choice == "yes":
-            favorite = "⭐"
+            favorite = "★"
         elif choice == "no":
             break
         else:
@@ -109,7 +107,7 @@ def add_recipe():
     while True:
         name = input("Enter recipe name: ")
         if name == "":
-            print("Blank space is not a valide entry. Please try again.")
+            print("Blank space is not a valid entry. Please try again.")
         else:
             break
 
@@ -117,7 +115,7 @@ def add_recipe():
     while True:
         description = input("Enter recipe description: ")
         if description == "":
-            print("Blank space is not a valide entry. Please try again.")
+            print("Blank space is not a valid entry. Please try again.")
         else:
             break
     
@@ -230,7 +228,7 @@ def add_recipe():
 #-----------------------------------------------------------------------
 # dont need to show ingredients until recipe is started. make shorter list to display
 def view_recipes():
-    print('Displaying All Recipes. Completed Recipes shown in Green.')
+    print('Displaying All Summary Recipes. Completed Recipes shown in Green.')
     # validate recipes exist. return and ends function if recipes is empty.
     if not recipes:
         print('No recipes available.')
@@ -243,7 +241,7 @@ def view_recipes():
     for recipe in recipes:        
         name = recipe["name"]
         # turn completed recipe name green
-        if recipe["name"] == "completed":
+        if recipe["finished_date"] != "N/A":
             name = Fore.GREEN + name + Style.RESET_ALL
         
         # append into a new list
@@ -253,8 +251,7 @@ def view_recipes():
             "name": name,
             "cook_time": recipe['cook_time'],
             "difficulty": recipe['difficulty'],
-            "category": recipe['category'],
-            "tags": recipe['tags'],
+            "category": recipe['category'],            
             "rating": recipe['rating']            
         }
         diplay_all_recipes.append(display_dict)
@@ -273,14 +270,14 @@ def filter_categories():
         else:
             print("Invalid category. Please try again.")
 
-        filtered_categories = [recipe for recipe in recipes if cat_filter in recipe["category"].lower()]
+    filtered_categories = [recipe for recipe in recipes if cat_filter in recipe["category"].lower()]
 
         # validate recipes in category exist
-        if filtered_categories:
-            print(tabulate(filtered_categories,headers="keys", tablefmt="grid"))
-        else:
-            print("No recipes in that category.")
-            return
+    if filtered_categories:
+        print(tabulate(filtered_categories,headers="keys", tablefmt="grid"))
+    else:
+        print("No recipes in that category.")
+        return
 
 #-----------------------------------------------------------------------
 #   option [4] filter by Difficulty
@@ -293,14 +290,14 @@ def filter_difficulty():
         else:
             print("Invalid difficulty. Please try again.")
 
-        filtered_difficulty = [recipe for recipe in recipes if difficulty_filter in recipe["difficulty"].lower()]
+    filtered_difficulty = [recipe for recipe in recipes if difficulty_filter in recipe["difficulty"].lower()]
 
-        # validate recipes in difficulty exist
-        if filtered_difficulty:
-            print(tabulate(filtered_difficulty,headers="keys", tablefmt="grid"))
-        else:
-            print("No recipes in that difficulty.")
-            return  
+    # validate recipes in difficulty exist
+    if filtered_difficulty:
+        print(tabulate(filtered_difficulty,headers="keys", tablefmt="grid"))
+    else:
+        print("No recipes in that difficulty.")
+        return  
         
 #-----------------------------------------------------------------------
 #   option [5] filter by Cook Time
@@ -321,12 +318,12 @@ def filter_time():
         else:
             print("Invalid number entry. Select number (1-3).")
         
-        # validate recipes in time slot exist
-        if filtered_cook_time:
-            print(tabulate(filtered_cook_time,headers="keys", tablefmt="grid"))
-        else:
-            print("No recipes in that cook time.")
-            return 
+    # validate recipes in time slot exist
+    if filtered_cook_time:
+        print(tabulate(filtered_cook_time,headers="keys", tablefmt="grid"))
+    else:
+        print("No recipes in that cook time.")
+        return 
 
 #-----------------------------------------------------------------------
 #   option [6] sort by rating
@@ -426,7 +423,15 @@ def view_statistics():
 
 #---------------- Highest rated recipe
 
+
     rated_recipes = [item for item in recipes if item["rating"] != "N/A"]
+
+    # validate rated exist
+
+    if len(rated_recipes) == 0:
+        print("No recipes created yet.")
+        return
+    
     sorted_rated = sorted(rated_recipes, key=lambda rated_item: rated_item["rating"], reverse=True)
     max_rated = sorted_rated[0]
 
@@ -464,7 +469,7 @@ def mark_complete():
     date_string = datetime_now_stamp()
     selected_recipe['finished_date'] = date_string
 
-    print(f'Recipe "{selected_recipe['name']}" marked complete.')
+    print(f'Recipe "{selected_recipe["name"]}" marked complete.')
 
     # provide rating for finished recipe
     while True:
@@ -532,7 +537,7 @@ def run_recipe_goal():
             year_fin_recipes.append(finished)
     total_year_finished = len(year_fin_recipes)   
     
-    #-------- determin goal status
+    #-------- determine goal status
     
     current_goal = recipe_goals["year_goal"] 
     if 0 < current_goal:
@@ -541,7 +546,7 @@ def run_recipe_goal():
         else:               
             print(f'Recipe goal not met yet. Only {total_year_finished} recipes finished this year.')
     
-    #-------- overide or user existing goal
+    #-------- override or user existing goal
     if current_goal > 0:
         print(f"Current yearly recipe completion goal is {current_goal}.")
         while True:            
@@ -568,7 +573,7 @@ def run_recipe_goal():
 #   option [13] CSV export recipes
 #-----------------------------------------------------------------------  
 def csv_export():
-
+# note recipes with lists of ingredients and instructions need to be joined/flattened to export to csv properly.
     # validate recipes exist. return and ends function if recipes is empty.
     if not recipes:
         print('No recipes available to export.')
@@ -578,7 +583,8 @@ def csv_export():
     date_string = now.strftime("%Y-%m-%d %H:%M:%S")     
     date_now = date_string[:10]
 
-    with open(f'{date_now} recipes.csv', 'w') as file:
+    # encoding="utf-8" is needed for emoji stored in json
+    with open(f'{date_now} recipes.csv', 'w', encoding="utf-8") as file:
         file.write("number,favorite,name,description,ingredients,instructions,cook_time,difficulty,category,tags,rating,date_added,finished_date\n")
         for recipe in recipes:
             file.write(f"{recipe['number']},{recipe['favorite']},{recipe['name']},{recipe['description']},{recipe['ingredients']},{recipe['instructions']},{recipe['cook_time']},{recipe['difficulty']},{recipe['category']},{recipe['tags']},{recipe['rating']},{recipe['date_added']},{recipe['finished_date']}\n")
@@ -589,7 +595,7 @@ def csv_export():
 #-----------------------------------------------------------------------
 #   option [14] Get recipe Recommendation from not finished list
 #-----------------------------------------------------------------------
-def book_recommendation():
+def recipe_recommendation():
 
     # validate recipes exist. return and ends function if recipes is empty.
     if not recipes:
@@ -599,7 +605,7 @@ def book_recommendation():
     # make list of not finished recipes
     unfinished_recipes = [item for item in recipes if item["finished_date"] == "N/A"]
         
-    #make list of all books want to read
+    # make list of unfinished recipes
 
     
     if unfinished_recipes:
@@ -663,6 +669,8 @@ while True:
         run_recipe_goal()
         write_recipe_goals_json()
     elif option == '13':
-        pass      
+        csv_export()      
+    elif option == '14':
+        recipe_recommendation() 
     else:
         print("Invalid action. Please try again.")
