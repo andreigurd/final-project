@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import random
 from colorama import Fore, Style, init
+import csv
 
 valid_category = ["side dish", "main course", "dessert", "beverage"]
 valid_difficulty = ["hard", "medium", "easy"]
@@ -627,7 +628,6 @@ def run_recipe_goal():
 #   option [13] CSV export recipes
 #-----------------------------------------------------------------------  
 def csv_export():
-# note recipes with lists of ingredients and instructions need to be joined/flattened to export to csv properly.
     # validate recipes exist. return and ends function if recipes is empty.
     if not recipes:
         print('No recipes available to export.')
@@ -637,12 +637,54 @@ def csv_export():
     date_string = now.strftime("%Y-%m-%d %H:%M:%S")     
     date_now = date_string[:10]
 
-    # encoding="utf-8" is needed for emoji stored in json
-    with open(f'{date_now} recipes.csv', 'w', encoding="utf-8") as file:
-        file.write("number,favorite,name,description,ingredients,instructions,cook_time,difficulty,category,tags,rating,date_added,finished_date\n")
+    # encoding="utf-8" is needed for emoji stored in json. utf-8-sig is even better.
+    # note that file.write() is not good with commas, quote marks, and spaces. csv.writer() may be better
+    with open(f'{date_now} recipes.csv', 'w', newline="", encoding="utf-8-sig") as file:
+        writer = csv.writer(file)
+
+        writer.writerow([
+            "number",
+            "favorite",
+            "name","description",
+            "ingredients",
+            "instructions",
+            "cook time",
+            "difficulty",
+            "category",
+            "tags",
+            "rating",
+            "date added",
+            "finished date"
+            ])
+        #file.write("number,favorite,name,description,ingredients,instructions,cook_time,difficulty,category,tags,rating,date added,finished date\n")
+        #for recipe in recipes:
+            #file.write(f"{recipe['number']},{recipe['favorite']},{recipe['name']},{recipe['description']},{recipe['ingredients']},{recipe['instructions']},{recipe['cook_time']},{recipe['difficulty']},{recipe['category']},{recipe['tags']},{recipe['rating']},{recipe['date_added']},{recipe['finished_date']}\n")
         for recipe in recipes:
-            file.write(f"{recipe['number']},{recipe['favorite']},{recipe['name']},{recipe['description']},{recipe['ingredients']},{recipe['instructions']},{recipe['cook_time']},{recipe['difficulty']},{recipe['category']},{recipe['tags']},{recipe['rating']},{recipe['date_added']},{recipe['finished_date']}\n")
-    
+            # flatten lists to readable string
+            
+            ingredients_text = " ; ".join(f"{ingred['ingredient']} ({ingred['amount']})" for ingred in recipe["ingredients"])
+                # ";" divides the texts. can use any character
+            
+            instructions_text = " ; ".join(instr['instruction'] for instr in recipe["instructions"])
+
+            tags_text = " ; ".join(tag['tag'] for tag in recipe["tags"])
+
+            writer.writerow([
+                recipe['number'],
+                recipe['favorite'],
+                recipe['name'],
+                recipe['description'],
+                ingredients_text,
+                instructions_text,
+                recipe['cook_time'],
+                recipe['difficulty'],
+                recipe['category'],
+                tags_text,
+                recipe['rating'],
+                recipe['date_added'],
+                recipe['finished_date']
+                ])
+                
     file_path = os.path.abspath(f'{date_now} recipes.csv')
     print(f"CSV file exported to:\n{file_path}")
 
