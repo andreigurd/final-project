@@ -568,26 +568,30 @@ def start_recipe():
     print(f'Description: {selected_recipe["description"]}')
 
     while True:
-        description_done = input(f"Type Next to move to next step.").lower()
-        if description_done == "next":
+        description_done = input(f"Press Enter to move to next step.\n").lower()
+        if description_done == "":
             break
         else:
             print("Invalid entry. Please try again.")
+
+    print("Ingredients:")
 
     for ingred in selected_recipe['ingredients']:
         print(f'• {ingred["ingredient"]} ({ingred["amount"]})')
     while True:
-        ingredients_done = input(f"Type Next to move to next step.").lower()
-        if ingredients_done == "next":
+        ingredients_done = input(f"Press Enter to move to next step.\n").lower()
+        if ingredients_done == "":
             break
         else:
             print("Invalid entry. Please try again.")
 
+    print("Instructions:")
+
     for instru in selected_recipe['instructions']:
         print(f'🔹 {instru["instruction"]}.')
     while True:
-        direction_done = input(f"Type Next to move to next step.").lower()
-        if direction_done == "next":
+        direction_done = input(f"Press Enter to move to next step.\n").lower()
+        if direction_done == "":
             break
         else:
             print("Invalid entry. Please try again.")
