@@ -487,12 +487,13 @@ def view_statistics():
     
     sorted_rated = sorted(rated_recipes, key=lambda rated_item: rated_item["rating"], reverse=True)
     max_rated = sorted_rated[0]
+    max_recipe_name = max_rated['name']
 
     stats_table = [
         ["Total Recipes", total_recipes],
         ["Total Completed Recipes", total_completed],
         ["Recipes Completed This Month", total_month_finished],
-        ["Highest Rated Recipe", max_rated]
+        ["Highest Rated Recipe", max_recipe_name]
     ]
 
     print("--- Recipe Statistics ---")
