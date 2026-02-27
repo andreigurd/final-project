@@ -10,7 +10,7 @@ A command-line recipe tracking application. User can create recipes, manage comp
 - 🖥️ Sort and display recipes by multiple selected filters.
 - 🏷  Tag recipes for custom organization. 
 - 🔍 Search all recipes by any term.
-- ✅ Mark recipes complete.
+- ✅ Interactive cooking function. Select a recipe and gets guided through ingredients and instructions.
 - 🎯 Track and display recipe completion goal.
 - 📤 Export list of recipes to a CSV file.
 - 🎲 User can receive a random recipe recommendation from the unfinished recipe list. If all recipes are finished then recommendation will be pulled from all recipes.
@@ -34,6 +34,7 @@ python recipes.py
 ![Main Menu](screenshots/menu.png)
 ![Statistics Dashboard](screenshots/statistics.png)
 ![Recipe List](screenshots/all_recipes.png)
+![Start Recipe](screenshots/start_recipe.png)
 
 ## 🧠 What I Learned
 - How to separate different display summary and detailed views was very valuable. This allowed for cleaner, more readable outputs for users.
@@ -45,6 +46,7 @@ python recipes.py
 - Edit recipe function.
 - Multi user support with dedicated JSON files for each account.
 - Allow for recipe recommendation based on user input on what ingredients are available.
+- Add a "go back" option for the Start Recipe function that steps through the recipe ingredients and then instructions.
 
 ## 🤝 Contributing
 This is a learning project, but feedback is welcome!
