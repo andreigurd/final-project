@@ -368,8 +368,9 @@ def cook_time_sort():
 #-----------------------------------------------------------------------
 def search():
 
-    search_term = input("Enter search term: ").lower()
+    
     while True:
+        search_term = input("Enter search term: ").lower()
         if search_term == "":
             print("Blank is invalid entry. Please try again.")
         else:
@@ -380,31 +381,64 @@ def search():
     # search in name, description, ingredients, and tags
     # need unique variables for each. cant have multiple recipe variables in one function.
 
-    for a in recipes:
-        if search_term in a['name'].lower():
-            search_results.append(a)
+    for recipe in recipes:
+        if search_term in recipe['name'].lower():
+            # add validation to prevent duplicate recipes
+            if recipe not in search_results:
+                search_results.append(recipe)
 
-    for b in recipes:
-        if search_term in b['description'].lower():
-            search_results.append(b)
+    #for b in recipes:
+        if search_term in recipe['description'].lower():
+            if recipe not in search_results:
+                search_results.append(recipe)
 
 # ingredients is a list so need to look inside list.
-    for c in recipes:
-        for cc in c['ingredients']:
+    #for c in recipes:
+        for cc in recipe['ingredients']:
             # note dictionary ingredients has ingredient and amount. want to refrence ingredient here, no S.
             if search_term in cc['ingredient'].lower():
-                search_results.append(c)
+                if recipe not in search_results:
+                    search_results.append(recipe)
 
-    for d in recipes:
-        for dd in d['tags']:
+    #for d in recipes:
+        for dd in recipe['tags']:
             if search_term in dd['tag'].lower():
-                search_results.append(d)
+                if recipe not in search_results:
+                    search_results.append(recipe)
 
-    if search_results:
-        print(tabulate(search_results,headers="keys", tablefmt="grid"))
-    else:
+        if search_term in recipe['difficulty'].lower():
+            if recipe not in search_results:
+                search_results.append(recipe)
+
+    if not search_results:
         print("No matching recipes found.")
         return
+        #print(tabulate(search_results,headers="keys", tablefmt="grid"))
+    # else:
+    #     print("No matching recipes found.")
+    #     return
+
+    search_summary = []
+
+    for summary in search_results:        
+        name = summary["name"]
+        # turn completed recipe name green
+        if summary["finished_date"] != "N/A":
+            name = Fore.GREEN + name + Style.RESET_ALL
+        
+        # append into a new list
+        display_dict = {
+            "number": summary['number'],
+            "favorite": summary['favorite'],
+            "name": name,
+            "cook_time": summary['cook_time'],
+            "difficulty": summary['difficulty'],
+            "category": summary['category'],            
+            "rating": summary['rating']            
+        }
+        search_summary.append(display_dict)
+
+    print(tabulate(search_summary,headers="keys", tablefmt="grid"))
 
 #-----------------------------------------------------------------------
 #   option [9] Recipe Statistics
